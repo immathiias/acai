@@ -1,0 +1,212 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String  @id @default(uuid())
+  name      String
+  email     String  @unique
+  googleId  String? @unique
+  avatarUrl String?
+  phone     Int?
+  role      String  @default("USER")
+
+  orderDetails     OrderDetail[]
+  reviews          Review[]
+  shoppingSessions ShoppingSession[]
+  userAddresses    UserAddress[]
+  userPayments     UserPayment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id   String  @id @default(uuid())
+  name String
+  desc String?
+
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id         String   @id @default(uuid())
+  categoryId String
+  name       String
+  desc       String?
+  price      Decimal?
+  solds      Int?     @default(0)
+
+  weights     Weight[]
+  additionals Additional[]
+  discount    Discount[]
+  orderItems  OrderItem[]
+  reviews     Review[]
+  cartItem    CartItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  category Category @relation(fields: [categoryId], references: [id])
+}
+
+model Weight {
+  id         String  @id @default(uuid())
+  productId  String
+  weightMili Int
+  price      Decimal
+  inventory  Int?    @default(0)
+  solds      Int?    @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model Additional {
+  id        String  @id @default(uuid())
+  productId String
+  name      String
+  type      String
+  price     Decimal
+  inventory Int?
+  solds     Int?    @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model Discount {
+  id        String  @id @default(uuid())
+  productId String
+  name      String
+  desc      String?
+  percent   Decimal
+  active    Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model OrderDetail {
+  id              String  @id @default(uuid())
+  userId          String
+  total           Decimal
+  paymentDetailId String
+
+  orderItems OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User          @relation(fields: [userId], references: [id])
+  payment PaymentDetail @relation(fields: [paymentDetailId], references: [id])
+}
+
+model OrderItem {
+  id             String @id @default(uuid())
+  quantity       Int
+  orderDetailsId String
+  productId      String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  order   OrderDetail @relation(fields: [orderDetailsId], references: [id])
+  product Product     @relation(fields: [productId], references: [id])
+}
+
+model Review {
+  id        String @id @default(uuid())
+  userId    String
+  productId String
+  message   String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model ShoppingSession {
+  id     String  @id @default(uuid())
+  userId String
+  total  Decimal
+
+  cartItems CartItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model UserAddress {
+  id          String @id @default(uuid())
+  userId      String
+  address     String
+  number      Int
+  city        String
+  postal_code String
+  telephone   String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model UserPayment {
+  id          String   @id @default(uuid())
+  userId      String
+  paymentType String
+  provider    String
+  expiry      DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model CartItem {
+  id                String @id @default(uuid())
+  shoppingSessionId String
+  productId         String
+  quantity          Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  session ShoppingSession @relation(fields: [shoppingSessionId], references: [id])
+  product Product         @relation(fields: [productId], references: [id])
+}
+
+model PaymentDetail {
+  id       String @id @default(uuid())
+  amount   Int
+  provider String
+  status   String
+
+  orderDetails OrderDetail[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
