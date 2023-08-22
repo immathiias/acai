@@ -8,7 +8,7 @@ import { FcGoogle } from 'react-icons/fc'
 
 export default function Header() {
   return (
-    <div className="flex w-full flex-col items-center bg-violet-900 shadow-sm shadow-zinc-950">
+    <header className="flex w-full flex-col items-center bg-violet-900 shadow-sm shadow-zinc-950">
       <div className="flex h-auto w-full flex-col items-center justify-between bg-violet-700 px-6 py-2 sm:flex-row">
         <button className="flex items-center gap-1">
           <FaWhatsapp className="h-5 w-5 text-zinc-200" />
@@ -45,7 +45,7 @@ export default function Header() {
       </div>
 
       <div className="mt-4 flex w-full flex-col">
-        <div className="flex flex-col items-center justify-between gap-5 py-2 sm:flex-row sm:items-end">
+        <nav className="flex flex-col items-center justify-between gap-5 py-2 sm:flex-row sm:items-end">
           <ul className="flex items-start justify-between">
             <li>
               <NavButtons name="Início" href="/" />
@@ -60,9 +60,10 @@ export default function Header() {
               <NavButtons name="Sobre" href="/" />
             </li>
           </ul>
-        </div>
-        <div className="h-1 w-full bg-zinc-950"></div>
+        </nav>
+
+        <div className="h-1 w-full bg-zinc-950" />
       </div>
-    </div>
+    </header>
   )
 }

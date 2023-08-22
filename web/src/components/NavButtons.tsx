@@ -1,4 +1,4 @@
-import { Buttons } from '@/interfaces/Button'
+import { Buttons } from '@/types/Button'
 import Link from 'next/link'
 
 export default function NavButtons(props: Buttons) {

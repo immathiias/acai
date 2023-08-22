@@ -1,4 +1,4 @@
-export interface Buttons {
+export type Buttons = {
   name: string
   href: string
 }

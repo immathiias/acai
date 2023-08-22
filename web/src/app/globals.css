@@ -12,7 +12,6 @@ body {
   background-repeat: no-repeat;
   background-position: top;
   background-size: cover;
-  background-attachment: fixed;
 
   height: 80vh;
 }
@@ -22,4 +21,12 @@ body {
 }
 .shadow-text-2 {
   text-shadow: 2px 2px #2E0B36;
+}
+
+.flyerImg {
+  transition: .2s;
+}
+
+.productHv:hover > .flyerImg {
+  transform: scale3d(1.1, 1.1, 1.1);
 }

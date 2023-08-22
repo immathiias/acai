@@ -48,6 +48,7 @@ model Product {
   price      Decimal?
   solds      Int?     @default(0)
 
+  flyers      Flyers[]
   weights     Weight[]
   additionals Additional[]
   discount    Discount[]
@@ -59,6 +60,18 @@ model Product {
   updatedAt DateTime @updatedAt
 
   category Category @relation(fields: [categoryId], references: [id])
+}
+
+model Flyers {
+  id        String  @id @default(uuid())
+  productId String
+  imageUrl  String
+  alt       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id])
 }
 
 model Weight {

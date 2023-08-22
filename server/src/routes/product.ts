@@ -4,7 +4,13 @@ import { z } from 'zod'
 
 export async function productRoutes(app: FastifyInstance) {
   app.get('/product', async () => {
-    const products = await prisma.product.findMany()
+    const products = await prisma.product.findMany({
+      include: {
+        flyers: true,
+        weights: true,
+        discount: true,
+      },
+    })
 
     return products
   })
@@ -20,6 +26,7 @@ export async function productRoutes(app: FastifyInstance) {
       const product = await prisma.product.findUniqueOrThrow({
         where: { id },
         include: {
+          flyers: true,
           weights: true,
           additionals: true,
           discount: true,
